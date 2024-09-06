@@ -1,19 +1,39 @@
 <template>
-    <header class="top-0 sticky h-16 bg-white/30 backdrop-blur-xl shadow-3xl">
-        <nav class="flex flex-row px-10 justify-between items-center opacity-80 text-weather-secondary">
+    <header class="top-0 sticky h-16 bg-white/30 dark:bg-weather-sdark backdrop-blur-xl shadow-3xl">
+        <nav class="flex flex-row px-10 justify-between items-center opacity-80 text-weather-secondary dark:text-weather-light">
             <div class="flex flex-row items-center">
                 <span class="material-symbols-outlined text-4xl  m-2">emoji_nature</span>
-                <RouterLink :to="{name: 'home'}" class="text-2xl">Weather Forecast</RouterLink>
+                <RouterLink :to="{ name: 'home' }" class="text-2xl">Weather Forecast</RouterLink>
             </div>
-            <span class="material-symbols-outlined cursor-pointer" @click="isDark">dark_mode</span>
+            <div class="h-6">
+                <span v-if="settingsOpen" class="material-symbols-outlined cursor-pointer" @click="toggleDark()">dark_mode</span>
+                <span v-if="settingsOpen" class="material-symbols-outlined cursor-pointer px-2" @click="toggleUnit">device_thermostat</span>
+                <span class="material-symbols-outlined cursor-pointer" 
+                :style="{ transform: `rotate(${rotation}deg)`, transition: 'transform 0.3s ease' }" @click="settingsTrigger()">settings</span>
+                
+            </div>
         </nav>
     </header>
 </template>
 
-<script>
+<script setup>
 import { RouterLink } from 'vue-router';
+import { ref, computed } from 'vue';
+import { toggleUnit } from './Weather.vue';
+import { useDark, useToggle } from '@vueuse/core';
 
-export default {};
+
+const isDark = useDark();
+const toggleDark = useToggle(isDark);
+
+
+let settingsOpen = ref(false);
+const rotation = computed(() => (settingsOpen.value ? 90 : 0));
+
+function settingsTrigger () {
+    settingsOpen.value = !settingsOpen.value;
+};
+
 </script>
 
 <style scoped>
