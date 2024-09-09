@@ -28,15 +28,23 @@ export const handleSearch = async () => {
     }
 };
 
-export const weatherData = ref(null);
+export const weatherData =  ref(JSON.parse(sessionStorage.getItem('weatherData')) || null);
 
 export const getWeather = async (id) => {
     try {
-        const res = await fetch(`api=id:${id}apicont`);
+        const res = await fetch(`api=id:${id}api`);
         const data = await res.json();
         weatherData.value = data;
+        sessionStorage.setItem('weatherData', JSON.stringify(data));
     }
     catch {
         console.error('Error fetching weather data:', error);
     }
 };
+
+export const titles = ['Today', 'Tomorrow', 'Day After'];
+
+export const forDays = titles.map((title, index) => ({
+    id: index,
+    title: title
+}));

@@ -21,7 +21,9 @@
             </div>
         </div>
     </main>
+    
     <Weather :weatherData="weatherData" />
+
 </template>
 
 <script setup>
